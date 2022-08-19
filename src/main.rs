@@ -45,6 +45,16 @@ impl Game{
         let (position, size) = self.dot2.draw_info(self.scale_factor);
         graphics.draw_circle(position, size, Color::from_rgb(1.0, 0.4, 0.8));
     }
+    pub fn tick(&mut self){
+        if let Some(accel1) = self.accel1_position{
+            self.dot1.accelerate_tick(accel1);
+        }
+        if let Some(accel2) = self.accel2_position{
+            self.dot2.accelerate_tick(accel2);
+        }
+        self.dot1.speed_tick(self.canvas_size);
+        self.dot2.speed_tick(self.canvas_size);
+    }
 }
 
 impl WindowHandler for Game {
@@ -104,6 +114,7 @@ impl WindowHandler for Game {
         }
 
     fn on_draw(&mut self, helper: &mut WindowHelper, graphics: &mut Graphics2D) {
+        self.tick();
         graphics.clear_screen(speedy2d::color::Color::BLACK);
         // let text = prep_label(
         //     &self.font,
